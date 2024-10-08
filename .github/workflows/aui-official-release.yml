@@ -1,0 +1,61 @@
+name: Official AUI release to Maven
+
+on:
+  workflow_dispatch:
+    inputs:
+      snapshotId:
+        description: 'Snapshot Run ID'
+        default: ''
+        type: string
+
+jobs:
+    aui-release:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [0.12.18]
+
+        steps:
+            - name: maven-settings-xml-action
+              uses: s4u/maven-settings-action@v2.3.0
+              with:
+                servers: |
+                  [{
+                      "id": "liferay-public-releases",
+                      "username": "${{ secrets.MAVEN_USERNAME }}",
+                      "password": "${{ secrets.MAVEN_PASSWORD }}"
+                  }]
+
+            - uses: actions/checkout@v4
+              with:
+                repository: liferay/liferay-frontend-projects
+
+            - name: Retrieve Snapshot Build
+              id: snapshot-build
+              uses: actions/cache@v3
+              with:
+                path: third-party/projects/alloy-ui/build
+                key: ${{ github.event.inputs.snapshotId }}-build
+
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+
+            - run: npm i
+              working-directory: third-party/projects/alloy-ui
+
+            - run: npm i -g gulp@^3.8.5
+              working-directory: third-party/projects/alloy-ui
+
+            - run: gulp init
+              if: ${{steps.snapshot-build.outputs.cache-hit != 'true'}}
+              working-directory: third-party/projects/alloy-ui
+
+            - run: gulp build
+              if: ${{steps.snapshot-build.outputs.cache-hit != 'true'}}
+              working-directory: third-party/projects/alloy-ui
+
+            - run: gulp maven-publish
+              working-directory: third-party/projects/alloy-ui
