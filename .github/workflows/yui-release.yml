@@ -1,0 +1,53 @@
+## TODO
+
+# name: Create YUI Release
+
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       yuiVersion:
+#         description: 'New YUI version (patched-3.18.1)'
+#         default: ''
+#         type: string
+
+# jobs:
+#     aui-release:
+#         runs-on: ubuntu-latest
+
+#         strategy:
+#             matrix:
+#                 node-version: [8.15.0]
+
+#         steps:
+#             - uses: actions/checkout@v4
+#               with:
+#                 repository: liferay/yui3
+
+#             - name: Use Node.js ${{ matrix.node-version }}
+#               uses: actions/setup-node@v4
+#               with:
+#                   node-version: ${{ matrix.node-version }}
+
+#             - run: npm i
+#             - run: npm run build
+
+#             - name: Check for diff
+#               id: check_changes
+#               run: |
+#                   if git diff --exit-code; then
+#                     echo "No changes to commit."
+#                     echo "::set-output name=changes::false"
+#                   else
+#                     echo "::set-output name=changes::true"
+#                   fi
+
+#             - name: Commit and push diff
+#               if: steps.check_changes.outputs.changes == 'true'
+#               run: |
+#                   git checkout -b ${{ github.event.inputs.yuiVersion }}
+#                   git config --global user.name "Frontend Infrastructure Team"
+#                   git config user.email "<>"
+#                   git commit -a -m "chore: build ${{ github.event.inputs.yuiVersion }}"
+#                   git push origin HEAD:${{ github.event.inputs.yuiVersion }}
+#               env:
+#                 GH_TOKEN: ${{ secrets.PAT }}
