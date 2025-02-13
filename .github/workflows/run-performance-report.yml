@@ -1,4 +1,4 @@
-name: Performance Report
+name: Run Performance Report
 
 on:
   workflow_dispatch:
@@ -39,12 +39,14 @@ jobs:
       - name: Checkout liferay-portal/master
         uses: actions/checkout@v4
         with:
+          path: 'liferay-portal'
           repository: 'liferay-frontend/liferay-portal'
           # token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout github-actions/gh-pages
         uses: actions/checkout@v4
         with:
+          path: 'gh-pages'
           ref: 'gh-pages'
           repository: 'liferay-frontend/github-actions'
           # token: ${{ secrets.GITHUB_TOKEN }}
