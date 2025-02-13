@@ -5,9 +5,9 @@ on:
   schedule:
     - cron: "0 9 * * *" 
 
-# permissions:
+permissions:
+  pages: write
 #   contents: write
-#   pages: write
 #   id-token: write
 
 env:
