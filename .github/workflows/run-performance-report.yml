@@ -31,6 +31,15 @@ jobs:
         with:
           node-version: '20.12.2'
 
+      - name: Configure git identity
+        run: |
+          # Configure git identity
+          set -x
+
+          git config --global user.email "liferay-frontend@liferay.com"
+          git config --global user.name "Liferay Frontend User"
+
+
       - name: Sync liferay-portal repo
         run: |
           # Sync liferay-portal repo
