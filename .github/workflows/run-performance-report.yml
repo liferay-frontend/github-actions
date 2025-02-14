@@ -7,13 +7,12 @@ on:
 
 permissions:
   pages: write
-#   contents: write
-#   id-token: write
+  contents: write
+  id-token: write
 
 env:
   ANT_OPTS: -Xmx2561m
   CREATE_BUNDLE_REPORTS: yes
-  GH_TOKEN: ${{ secrets.PAT }}
   NODE_ENV: production
 
 jobs:
@@ -41,6 +40,8 @@ jobs:
 
 
       - name: Sync liferay-portal repo
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
         run: |
           # Sync liferay-portal repo
           set -x
@@ -52,6 +53,8 @@ jobs:
 
       - name: Checkout liferay-portal/master
         uses: actions/checkout@v4
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
         with:
           path: 'liferay-portal'
           repository: 'liferay-frontend/liferay-portal'
