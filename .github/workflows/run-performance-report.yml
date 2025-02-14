@@ -133,9 +133,9 @@ jobs:
             </html>
           " >> gh-pages/sonda-files.html
 
-      - name: Generate index page
+      - name: Generate index page and publish
         run: |
-          # Generate index page
+          # Generate index page and publish
           set -x
 
           DATE=$(date --iso-8601)
@@ -203,12 +203,6 @@ jobs:
             </body>
             </html>
           " > gh-pages/index.html
-
-
-      - name: Publish gh-pages
-        run: |
-          # Publish gh-pages
-          set -x
 
           cd gh-pages
           git add .
