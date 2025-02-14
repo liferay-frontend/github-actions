@@ -95,9 +95,47 @@ jobs:
           yarn node-scripts report:java:imports
 
 
-      - name: Publish reports
+      - name Copy reports and Sonda.dev files
         run: |
-          # Publish reports
+          # Copy reports and Sonda.dev files
+          set -x
+
+          cp -v liferay-portal/modules/*.csv gh-pages
+
+          mapfile -t sonda_files < <(find liferay-portal -wholename '*/bundle-reports/*.html' | sort)
+
+          mkdir gh-pages/liferay-portal
+          echo "
+            <html>
+            <head>
+              <title>Sonda.dev files</title>
+              <style>
+                  a {
+                    display: block;
+                  }
+                  body {
+                    font-family: sans-serif;
+                  }
+              </style>
+            </head>
+            <body>
+          " >gh-pages/sonda-files.html
+
+          for file in "${sonda_files[@]}"; do
+            mkdir -p "gh-pages/$(dirname "${file}")"
+            cp -v "${file}" gh-pages
+
+            echo "<a href="${file}">${file}</a>" >> gh-pages/sonda-files.html
+          done
+
+          echo "
+            </body>
+            </html>
+          " >> gh-pages/sonda-files.html
+
+      - name: Generate index page
+        run: |
+          # Generate index page
           set -x
 
           DATE=$(date --iso-8601)
@@ -148,6 +186,9 @@ jobs:
 
                 <h2>Resources:</h2>
 
+                <a href="./sonda-files.html">
+                  List of Sonda.dev files
+                </a>
                 <a href="https://github.com/liferay-frontend/github-actions/commits/gh-pages/">
                   List of previous report commits in gh-pages branch
                 </a>
@@ -163,7 +204,11 @@ jobs:
             </html>
           " > gh-pages/index.html
 
-          cp -v liferay-portal/modules/*.csv gh-pages
+
+      - name: Publish gh-pages
+        run: |
+          # Publish gh-pages
+          set -x
 
           cd gh-pages
           git add .
