@@ -123,7 +123,7 @@ jobs:
 
           for file in "${sonda_files[@]}"; do
             mkdir -p "gh-pages/$(dirname "${file}")"
-            cp -v "${file}" gh-pages
+            cp -v "${file}" "gh-pages/${file}"
 
             echo "<a href="${file}">${file}</a>" >> gh-pages/sonda-files.html
           done
