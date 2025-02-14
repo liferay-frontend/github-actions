@@ -95,7 +95,7 @@ jobs:
           yarn node-scripts report:java:imports
 
 
-      - name Copy reports and Sonda.dev files
+      - name: Copy reports and Sonda.dev files
         run: |
           # Copy reports and Sonda.dev files
           set -x
