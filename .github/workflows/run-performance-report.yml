@@ -121,7 +121,7 @@ jobs:
             </head>
             <body>
               $(
-                for file in "${sonda_files[@]}"; do
+                for file in ${sonda_files[@]}; do
                   mkdir -p "gh-pages/runs/${DATE}/$(dirname "${file}")"
                   cp "${file}" "gh-pages/runs/${DATE}/${file}"
 
@@ -252,7 +252,7 @@ jobs:
               <h2>Performance Reports</h2>
               <ul>
                 $(
-                  for file in "gh-pages/runs/*"; do
+                  for file in gh-pages/runs/*; do
                     filename="$(basename "$file")"
 
                     echo "
