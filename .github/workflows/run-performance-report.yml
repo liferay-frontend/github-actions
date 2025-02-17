@@ -163,11 +163,19 @@ jobs:
                   pre {
                     font-size: 1.1em;
                   }
+                  .separator {
+                    padding: 0 4px;
+                  }
+                  .flex {
+                    display: flex;
+                  }
                 </style>
             </head>
             <body>
-                <div style="display:flex;">
-                  <a href="/runs/${DATE_YESTERDAY}">Previous: ${DATE_YESTERDAY}</a> <span style="padding: 0 4px;">-</span> <a href="/runs/${DATE_TOMORROW}">Next: ${DATE_TOMORROW}</a>
+                <div class="flex">
+                  <a href="/runs/${DATE_YESTERDAY}">Previous: ${DATE_YESTERDAY}</a>
+                  <span class="separator">-</span>
+                  <a href="/runs/${DATE_TOMORROW}>"Next: ${DATE_TOMORROW}</a>
                 </div>
 
                 <h2>Details of report:</h2>
@@ -192,7 +200,7 @@ jobs:
 
                 <h2>Resources:</h2>
 
-                <a href="./sonda-files.html">
+                <a href=""/runs/${DATE}/sonda-files.html">
                   List of Sonda.dev files
                 </a>
                 <a href="https://github.com/liferay-frontend/github-actions/commits/gh-pages/">
@@ -207,8 +215,7 @@ jobs:
                 <a href="/runs/${DATE}/source-imports.csv">source-imports.csv</a>
                 <a href="/runs/${DATE}/java-imports.csv">java-imports.csv</a>
             </body>
-            </html>
-          " > gh-pages/runs/${DATE}/index.html
+            </html>" > gh-pages/runs/${DATE}/index.html
 
           cp -v liferay-portal/modules/*.csv gh-pages
 
