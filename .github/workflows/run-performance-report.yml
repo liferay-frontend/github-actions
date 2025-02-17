@@ -120,102 +120,101 @@ jobs:
               </style>
             </head>
             <body>
-          " >gh-pages/runs/${DATE}/sonda-files.html
+              $(
+                for file in "${sonda_files[@]}"; do
+                  mkdir -p "gh-pages/runs/${DATE}/$(dirname "${file}")"
+                  cp "${file}" "gh-pages/runs/${DATE}/${file}"
 
-          for file in "${sonda_files[@]}"; do
-            mkdir -p "gh-pages/runs/${DATE}/$(dirname "${file}")"
-            cp -v "${file}" "gh-pages/runs/${DATE}/${file}"
-
-            echo "<a href="${file}">${file}</a>" >> gh-pages/runs/${DATE}/sonda-files.html
-          done
-
-          echo "
+                  echo "<a href='${file}'>${file}</a>"
+                done
+              )
             </body>
             </html>
-          " >> gh-pages/runs/${DATE}/sonda-files.html
+          " > gh-pages/runs/${DATE}/sonda-files.html
 
       - name: Generate report index page and publish
         run: |
           # Generate index page and publish
           set -x
 
-          DATE=$(date --iso-8601)
-          DATE_YESTERDAY=$(date --date="yesterday" --iso-8601)
-          DATE_TOMORROW=$(date --date="tomorrow" --iso-8601)
-          COMMIT=$(cd liferay-portal && git rev-parse HEAD)
+          DATE="$(date --iso-8601)"
+          DATE_YESTERDAY="$(date --date="yesterday" --iso-8601)"
+          DATE_TOMORROW="$(date --date="tomorrow" --iso-8601)"
+          COMMIT="$(cd liferay-portal && git rev-parse HEAD)"
 
           echo "
             <html>
             <head>
-                <title>Reports for ${DATE} [${COMMIT}]</title>
-                <style>
-                  a {
-                    display: block;
-                  }
-                  body {
-                    font-family: sans-serif;
-                  }
-                  h2 {
-                    border-top: 2px solid #222;
-                    font-size: 1.2em;
-                    padding-top: 0.2em;
-                  }
-                  pre {
-                    font-size: 1.1em;
-                  }
-                  .separator {
-                    padding: 0 4px;
-                  }
-                  .flex {
-                    display: flex;
-                  }
-                </style>
+              <title>Reports for ${DATE} [${COMMIT}]</title>
+              <style>
+                a {
+                  display: block;
+                }
+                body {
+                  font-family: sans-serif;
+                }
+                h2 {
+                  border-top: 2px solid #222;
+                  font-size: 1.2em;
+                  padding-top: 0.2em;
+                }
+                pre {
+                  font-size: 1.1em;
+                }
+                .separator {
+                  padding: 0 4px;
+                }
+                .flex {
+                  display: flex;
+                }
+              </style>
             </head>
             <body>
-                <div class="flex">
-                  <a href="/runs/${DATE_YESTERDAY}">Previous: ${DATE_YESTERDAY}</a>
-                  <span class="separator">-</span>
-                  <a href="/runs/${DATE_TOMORROW}>"Next: ${DATE_TOMORROW}</a>
-                </div>
-
-                <h2>Details of report:</h2>
-
-                <div>
-                  <b>Date:</b>
-                  ${DATE}
-                </div>
-                <div>
-                  <b>Commit SHA:</b>
-                  ${COMMIT}
-                </div>
-                <a href="https://github.com/liferay/liferay-portal/tree/${COMMIT}">
-                  Browse liferay-portal repository when this report was generated
+              <div class='flex'>
+                <a href='/runs/${DATE_YESTERDAY}'>
+                  Previous: ${DATE_YESTERDAY}
                 </a>
-
-
-                <h2>Diff with previous build:</h2>
-
-                <pre>$(node github-actions/difftool/difftool.mjs gh-pages/runs/${DATE_YESTERDAY} liferay-portal/modules)</pre>
-
-
-                <h2>Resources:</h2>
-
-                <a href=""/runs/${DATE}/sonda-files.html">
-                  List of Sonda.dev files
+                <span class='separator'>-</span>
+                <a href='/runs/${DATE_TOMORROW}'>
+                  Next: ${DATE_TOMORROW}
                 </a>
-                <a href="https://github.com/liferay-frontend/github-actions/commits/gh-pages/">
-                  List of previous report commits in gh-pages branch
-                </a>
-                <br>
-                <a href="/runs/${DATE}/bundle-sizes.csv">bundle-sizes.csv</a>
-                <a href="/runs/${DATE}/bundle-sizes-with-internals.csv">
-                  bundle-sizes-with-internals.csv
-                </a>
-                <a href="/runs/${DATE}/bundle-imports.csv">bundle-imports.csv</a>
-                <a href="/runs/${DATE}/source-imports.csv">source-imports.csv</a>
-                <a href="/runs/${DATE}/java-imports.csv">java-imports.csv</a>
+              </div>
+
+              <h2>Details of report:</h2>
+
+              <div>
+                <b>Date:</b> ${DATE}
+              </div>
+              <div>
+                <b>Commit SHA:</b> ${COMMIT}
+              </div>
+              <a href='https://github.com/liferay/liferay-portal/tree/${COMMIT}'>
+                Browse liferay-portal repository when this report was generated
+              </a>
+
+              <h2>Diff with previous build:</h2>
+
+              <pre>$(node github-actions/difftool/difftool.mjs gh-pages/runs/${DATE_YESTERDAY} liferay-portal/modules)</pre>
+
+              <h2>Resources:</h2>
+
+              <a href='/runs/${DATE}/sonda-files.html'>
+                List of Sonda.dev files
+              </a>
+              <a href='https://github.com/liferay-frontend/github-actions/commits/gh-pages/'>
+                List of previous report commits in gh-pages branch
+              </a>
+              <br>
+              <a href='/runs/${DATE}/bundle-sizes.csv'>bundle-sizes.csv</a>
+              <a href='/runs/${DATE}/bundle-sizes-with-internals.csv'>
+                bundle-sizes-with-internals.csv
+              </a>
+              <a href='/runs/${DATE}/bundle-imports.csv'>bundle-imports.csv</a>
+              <a href='/runs/${DATE}/source-imports.csv'>source-imports.csv</a>
+              <a href='/runs/${DATE}/java-imports.csv'>java-imports.csv</a>
             </body>
-            </html>" > gh-pages/runs/${DATE}/index.html
+            </html>
+          " > gh-pages/runs/${DATE}/index.html
 
           cp -v liferay-portal/modules/*.csv gh-pages
 
@@ -230,33 +229,45 @@ jobs:
           set -x
           echo "
             <html>
-              <head>
-                <title>Performance Reports</title>
-                <style>
-                  a {
+            <head>
+              <title>Performance Reports</title>
+              <style>
+                a {
                   display: block;
-                  }
-                  body {
+                }
+                body {
                   font-family: sans-serif;
-                  }
-                  h2 {
+                }
+                h2 {
                   border-top: 2px solid #222;
                   font-size: 1.2em;
                   padding-top: 0.2em;
-                  }
-                  pre {
+                }
+                pre {
                   font-size: 1.1em;
-                  }
-                </style>
-              </head>
-              <body><h2>Performance Reports</h2><ul>" > gh-pages/index.html
+                }
+              </style>
+            </head>
+            <body>
+              <h2>Performance Reports</h2>
+              <ul>
+                $(
+                  for file in "gh-pages/runs/*"; do
+                    filename="$(basename "$file")"
 
-          for file in gh-pages/runs/*; do
-            filename=$(basename "$file")
-            echo "<li><a href=\"/runs/${filename}\">${filename}</a></li>" >> gh-pages/index.html
-          done
-
-          echo "</ul></body></html>" >> gh-pages/index.html
+                    echo "
+                      <li>
+                        <a href='/runs/${filename}'>
+                          ${filename}
+                        </a>
+                      </li>
+                    " 
+                  done
+                )
+              </ul>
+            </body>
+            </html>
+          " > gh-pages/index.html
 
           cd gh-pages
           git add .
