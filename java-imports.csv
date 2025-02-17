@@ -178,6 +178,7 @@ BUNDLE;IMPORT;SYMBOLS
 "modules/apps/sharing/sharing-taglib";"sharing-taglib";"Collaborators"
 "modules/apps/sharing/sharing-web";"sharing-web";"ManageCollaborators,SharedAssets,SharedAssetsManagementToolbarPropsTransformer,Sharing"
 "modules/apps/site/site-admin-web";"site-admin-web";"AddGroup,Details,MenuAccess,Ratings,SelectSiteInitializerVerticalCardPropsTransformer,SiteDropdownDefaultPropsTransformer,SiteLanguageConfiguration,SiteManagementToolbarPropsTransformer"
+"modules/apps/site/site-cms-site-initializer";"site-cms-site-initializer";"StructureBuilder"
 "modules/apps/site/site-memberships-web";"site-memberships-web";"OrganizationCardPropsTransformer,OrganizationDropdownDefaultPropsTransformer,OrganizationsManagementToolbarPropsTransformer,UserCardPropsTransformer,UserDropdownDefaultPropsTransformer,UserGroupsDefaultPropsTransformer,UserGroupsManagementToolbarPropsTransformer,UserManagementToolbarPropsTransformer"
 "modules/apps/site/site-my-sites-web";"site-my-sites-web";"SiteDropdownDefaultPropsTransformer"
 "modules/apps/site/site-sitemap-web";"site-sitemap-web";"SitemapCompanyConfiguration"
