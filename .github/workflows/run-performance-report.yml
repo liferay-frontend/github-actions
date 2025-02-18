@@ -252,7 +252,9 @@ jobs:
               <h2>Performance Reports</h2>
               <ul>
                 $(
-                  for file in gh-pages-repo/runs/*; do
+                  mapfile -t files < <(ls gh-pages-repo/runs | sort -r)
+
+                  for file in "${files[@]}"; do
                     filename="$(basename "$file")"
 
                     echo "
