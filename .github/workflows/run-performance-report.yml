@@ -216,7 +216,7 @@ jobs:
             </html>
           " > gh-pages-repo/runs/${DATE}/index.html
 
-          cp -v liferay-portal-repo/modules/*.csv gh-pages-repo
+          cp -v liferay-portal-repo/modules/*.csv gh-pages-repo/runs/${DATE}
 
           cd gh-pages-repo
           git add .
