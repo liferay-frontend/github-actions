@@ -56,19 +56,19 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT }}
         with:
-          path: 'liferay-portal'
+          path: 'liferay-portal-repo'
           repository: 'liferay-frontend/liferay-portal'
 
       - name: Checkout github-actions/master
         uses: actions/checkout@v4
         with:
-          path: 'github-actions'
+          path: 'github-actions-repo'
           repository: 'liferay-frontend/github-actions'
 
       - name: Checkout github-actions/gh-pages
         uses: actions/checkout@v4
         with:
-          path: 'gh-pages'
+          path: 'gh-pages-repo'
           ref: 'gh-pages'
           repository: 'liferay-frontend/github-actions'
 
@@ -77,7 +77,7 @@ jobs:
           # Build portal
           set -x
 
-          cd liferay-portal
+          cd liferay-portal-repo
           ant all
 
 
@@ -86,7 +86,7 @@ jobs:
           # Generate reports
           set -x
 
-          cd liferay-portal/modules
+          cd liferay-portal-repo/modules
 
           yarn node-scripts report:bundle:sizes
           yarn node-scripts report:bundle:sizes --with-internals
@@ -102,9 +102,9 @@ jobs:
 
           DATE=$(date --iso-8601)
 
-          mapfile -t sonda_files < <(find liferay-portal -wholename '*/bundle-reports/*.html' | sort)
+          mapfile -t sonda_files < <(find liferay-portal-repo -wholename '*/bundle-reports/*.html' | sort)
 
-          mkdir -p gh-pages/runs/${DATE}/liferay-portal
+          mkdir -p gh-pages-repo/runs/${DATE}/liferay-portal
 
           echo "
             <html>
@@ -122,15 +122,15 @@ jobs:
             <body>
               $(
                 for file in ${sonda_files[@]}; do
-                  mkdir -p "gh-pages/runs/${DATE}/$(dirname "${file}")"
-                  cp "${file}" "gh-pages/runs/${DATE}/${file}"
+                  mkdir -p "gh-pages-repo/runs/${DATE}/$(dirname "${file}")"
+                  cp "${file}" "gh-pages-repo/runs/${DATE}/${file}"
 
                   echo "<a href='${file}'>${file}</a>"
                 done
               )
             </body>
             </html>
-          " > gh-pages/runs/${DATE}/sonda-files.html
+          " > gh-pages-repo/runs/${DATE}/sonda-files.html
 
       - name: Generate report index page and publish
         run: |
@@ -140,7 +140,7 @@ jobs:
           DATE="$(date --iso-8601)"
           DATE_YESTERDAY="$(date --date="yesterday" --iso-8601)"
           DATE_TOMORROW="$(date --date="tomorrow" --iso-8601)"
-          COMMIT="$(cd liferay-portal && git rev-parse HEAD)"
+          COMMIT="$(cd liferay-portal-repo && git rev-parse HEAD)"
 
           echo "
             <html>
@@ -194,7 +194,7 @@ jobs:
 
               <h2>Diff with previous build:</h2>
 
-              <pre>$(node github-actions/difftool/difftool.mjs gh-pages/runs/${DATE_YESTERDAY} liferay-portal/modules)</pre>
+              <pre>$(node github-actions-repo/difftool/difftool.mjs gh-pages-repo/runs/${DATE_YESTERDAY} liferay-portal/modules)</pre>
 
               <h2>Resources:</h2>
 
@@ -214,11 +214,11 @@ jobs:
               <a href='/runs/${DATE}/java-imports.csv'>java-imports.csv</a>
             </body>
             </html>
-          " > gh-pages/runs/${DATE}/index.html
+          " > gh-pages-repo/runs/${DATE}/index.html
 
-          cp -v liferay-portal/modules/*.csv gh-pages
+          cp -v liferay-portal-repo/modules/*.csv gh-pages-repo
 
-          cd gh-pages
+          cd gh-pages-repo
           git add .
           git commit -m "Reports for ${DATE} [${COMMIT}]"
           git push
@@ -252,7 +252,7 @@ jobs:
               <h2>Performance Reports</h2>
               <ul>
                 $(
-                  for file in gh-pages/runs/*; do
+                  for file in gh-pages-repo/runs/*; do
                     filename="$(basename "$file")"
 
                     echo "
@@ -269,7 +269,7 @@ jobs:
             </html>
           " > gh-pages/index.html
 
-          cd gh-pages
+          cd gh-pages-repo
           git add .
           git commit -m "Update index page ${DATE} [${COMMIT}]"
           git push
