@@ -267,7 +267,7 @@ jobs:
               </ul>
             </body>
             </html>
-          " > gh-pages/index.html
+          " > gh-pages-repo/index.html
 
           cd gh-pages-repo
           git add .
