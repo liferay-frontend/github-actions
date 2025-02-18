@@ -194,7 +194,7 @@ jobs:
 
               <h2>Diff with previous build:</h2>
 
-              <pre>$(node github-actions-repo/difftool/difftool.mjs gh-pages-repo/runs/${DATE_YESTERDAY} liferay-portal/modules)</pre>
+              <pre>$(node github-actions-repo/difftool/difftool.mjs gh-pages-repo/runs/${DATE_YESTERDAY} liferay-portal-repo/modules)</pre>
 
               <h2>Resources:</h2>
 
