@@ -227,6 +227,10 @@ jobs:
         run: |
           # Generate index page and publish
           set -x
+
+          DATE="$(date --iso-8601)"
+          COMMIT="$(cd liferay-portal-repo && git rev-parse HEAD)"
+
           echo "
             <html>
             <head>
