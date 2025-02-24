@@ -3,7 +3,7 @@ name: Run Performance Report
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 7 * * 1-5" 
+    - cron: "0 7 * * *"
 
 permissions:
   pages: write
