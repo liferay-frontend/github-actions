@@ -171,6 +171,8 @@ jobs:
             </head>
             <body>
               <div class='flex'>
+                <a href='../../'>Home</a>
+                <span class='separator'>-</span>
                 <a href='../${DATE_YESTERDAY}'>
                   Previous: ${DATE_YESTERDAY}
                 </a>
