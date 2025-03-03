@@ -255,9 +255,9 @@ jobs:
               </style>
             </head>
             <body>
-              <nav style="display:flex;gap:12px;">
-                <a href=".">All</a>
-                <a href="./compare">Compare</a>
+              <nav style='display:flex;gap:12px;'> 
+                <a href='.'>All</a>
+                <a href='./compare'>Compare</a>
               </nav>
               <h2>Performance Reports</h2>
               <ul>
