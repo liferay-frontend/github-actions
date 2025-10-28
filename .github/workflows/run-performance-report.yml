@@ -92,7 +92,7 @@ jobs:
           cd liferay-portal-repo
 
           if [[ -n "${{ github.event.inputs.date }}" ]]; then
-            git checkout "$(git rev-list -n 1 --before="${{ github.event.inputs.date }}" master)"
+            git checkout "$(git rev-list -n 1 --before="${{ github.event.inputs.date }}" HEAD)"
           fi
 
           ant all
