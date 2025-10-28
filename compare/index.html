@@ -66,7 +66,7 @@
 			async function getBundleSizes(date) {
 				const sizes = {};
 
-				const lines = await fetch(`../runs/${date}/bundle-sizes.csv`)
+				const lines = await fetch(`https://raw.githubusercontent.com/liferay-frontend/github-actions/refs/heads/gh-pages-data/runs/${date}/bundle-sizes.csv`)
 					.then((response) => {
 						if (!response.ok) {
 							document.getElementById(
