@@ -56,13 +56,25 @@ jobs:
             --branch master
 
 
-      - name: Checkout liferay-portal/master
+      # Case 1: Date input provided → need full history
+      - name: Checkout liferay-portal with full history
+        if: ${{ github.event.inputs.date != '' }}
         uses: actions/checkout@v4
-        env:
-          GH_TOKEN: ${{ secrets.PAT }}
         with:
-          path: 'liferay-portal-repo'
-          repository: 'liferay-frontend/liferay-portal'
+          repository: liferay-frontend/liferay-portal
+          ref: master
+          path: liferay-portal-repo
+          fetch-depth: 0
+
+      # Case 2: No date input provided → shallow clone is fine
+      - name: Checkout liferay-portal shallow
+        if: ${{ github.event.inputs.date == '' }}
+        uses: actions/checkout@v4
+        with:
+          repository: liferay-frontend/liferay-portal
+          ref: master
+          path: liferay-portal-repo
+          fetch-depth: 1
 
       - name: Checkout github-actions/master
         uses: actions/checkout@v4
