@@ -72,6 +72,13 @@ jobs:
           ref: 'gh-pages'
           repository: 'liferay-frontend/github-actions'
 
+      - name: Checkout github-actions/gh-pages
+        uses: actions/checkout@v4
+        with:
+          path: 'gh-pages-data'
+          ref: 'gh-pages-data'
+          repository: 'liferay-frontend/github-actions'
+
       - name: Build portal
         run: |
           # Build portal
@@ -104,7 +111,7 @@ jobs:
 
           mapfile -t sonda_files < <(find liferay-portal-repo -wholename '*/bundle-reports/*.html' | sort)
 
-          mkdir -p gh-pages-repo/runs/${DATE}/liferay-portal
+          mkdir -p gh-pages-data/runs/${DATE}/liferay-portal
 
           echo "
             <html>
@@ -122,15 +129,15 @@ jobs:
             <body>
               $(
                 for file in ${sonda_files[@]}; do
-                  mkdir -p "gh-pages-repo/runs/${DATE}/$(dirname "${file}")"
-                  cp "${file}" "gh-pages-repo/runs/${DATE}/${file}"
+                  mkdir -p "gh-pages-data/runs/${DATE}/$(dirname "${file}")"
+                  cp "${file}" "gh-pages-data/runs/${DATE}/${file}"
 
                   echo "<a href='${file}'>${file}</a>"
                 done
               )
             </body>
             </html>
-          " > gh-pages-repo/runs/${DATE}/sonda-files.html
+          " > gh-pages-data/runs/${DATE}/sonda-files.html
 
       - name: Generate report index page and publish
         run: |
@@ -196,7 +203,7 @@ jobs:
 
               <h2>Diff with previous build:</h2>
 
-              <pre>$(node github-actions-repo/difftool/difftool.mjs gh-pages-repo/runs/${DATE_YESTERDAY} liferay-portal-repo/modules)</pre>
+              <pre>$(node github-actions-repo/difftool/difftool.mjs gh-pages-data/runs/${DATE_YESTERDAY} liferay-portal-repo/modules)</pre>
 
               <h2>Resources:</h2>
 
@@ -218,9 +225,16 @@ jobs:
             </html>
           " > gh-pages-repo/runs/${DATE}/index.html
 
-          cp -v liferay-portal-repo/modules/*.csv gh-pages-repo/runs/${DATE}
+          cp -v liferay-portal-repo/modules/*.csv gh-pages-data/runs/${DATE}
 
           cd gh-pages-repo
+          git add .
+          git commit -m "Reports for ${DATE} [${COMMIT}]"
+          git push
+
+          cd ..
+
+          cd gh-pages-data
           git add .
           git commit -m "Reports for ${DATE} [${COMMIT}]"
           git push
