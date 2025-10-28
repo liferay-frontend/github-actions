@@ -55,11 +55,24 @@ jobs:
             --source liferay/liferay-portal \
             --branch master
 
-      - name: Checkout liferay-portal shallow
+      - name: Checkout liferay-portal (shallow)
         uses: actions/checkout@v4
         with:
           repository: liferay-frontend/liferay-portal
+          ref: master
           path: liferay-portal-repo
+
+      - name: Deepen history fully if date provided
+        if: ${{ github.event.inputs.date != '' }}
+        working-directory: liferay-portal-repo
+        run: |
+          git fetch origin master --shallow-since="${{ github.event.inputs.date }} - 7 days"
+
+          # find exact commit by date (zero-time fallback to end-of-day)
+          COMMIT=$(git rev-list -n 1 --before="${{ github.event.inputs.date }}" origin/master)
+
+          echo "✅ Using exact commit: $COMMIT"
+          git checkout "$COMMIT"
 
       - name: Checkout github-actions/master
         uses: actions/checkout@v4
@@ -74,22 +87,12 @@ jobs:
           ref: 'gh-pages'
           repository: 'liferay-frontend/github-actions'
 
-      - name: Checkout github-actions/gh-pages
+      - name: Checkout github-actions/gh-pages-data
         uses: actions/checkout@v4
         with:
           path: 'gh-pages-data'
           ref: 'gh-pages-data'
           repository: 'liferay-frontend/github-actions'
-
-      - name: Get specific commit date in liferay-portal
-        if: ${{ github.event.inputs.date != '' }}
-        working-directory: liferay-portal-repo
-        run: |
-          git fetch origin master --shallow-since="${{ github.event.inputs.date }}"
-
-          COMMIT=$(git rev-list -n 1 --before="${{ github.event.inputs.date }}" origin/master)
-          echo "Using commit: $COMMIT"
-          git checkout "$COMMIT"
 
       - name: Build portal
         run: |
