@@ -43,7 +43,6 @@ jobs:
           git config --global user.email "liferay-frontend@liferay.com"
           git config --global user.name "Liferay Frontend User"
 
-
       - name: Sync liferay-portal repo
         env:
           GH_TOKEN: ${{ secrets.PAT }}
@@ -74,26 +73,6 @@ jobs:
           echo "✅ Using exact commit: $COMMIT"
           git checkout "$COMMIT"
 
-      - name: Checkout github-actions/master
-        uses: actions/checkout@v4
-        with:
-          path: 'github-actions-repo'
-          repository: 'liferay-frontend/github-actions'
-
-      - name: Checkout github-actions/gh-pages
-        uses: actions/checkout@v4
-        with:
-          path: 'gh-pages-repo'
-          ref: 'gh-pages'
-          repository: 'liferay-frontend/github-actions'
-
-      - name: Checkout github-actions/gh-pages-data
-        uses: actions/checkout@v4
-        with:
-          path: 'gh-pages-data'
-          ref: 'gh-pages-data'
-          repository: 'liferay-frontend/github-actions'
-
       - name: Build portal
         run: |
           # Build portal
@@ -116,6 +95,31 @@ jobs:
           yarn node-scripts report:source:imports
           yarn node-scripts report:java:imports
 
+      - name: Clear up space before cloning more repos
+        run: |
+          cd liferay-portal-repo
+          rm -rf .git
+          rm -rf .gradle
+
+      - name: Checkout github-actions/master
+        uses: actions/checkout@v4
+        with:
+          path: 'github-actions-repo'
+          repository: 'liferay-frontend/github-actions'
+
+      - name: Checkout github-actions/gh-pages
+        uses: actions/checkout@v4
+        with:
+          path: 'gh-pages-repo'
+          ref: 'gh-pages'
+          repository: 'liferay-frontend/github-actions'
+
+      - name: Checkout github-actions/gh-pages-data
+        uses: actions/checkout@v4
+        with:
+          path: 'gh-pages-data'
+          ref: 'gh-pages-data'
+          repository: 'liferay-frontend/github-actions'
 
       - name: Copy Sonda.dev files
         run: |
