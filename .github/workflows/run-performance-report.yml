@@ -178,6 +178,8 @@ jobs:
           DATE_YESTERDAY="$(date --date="$DATE -1 day" --iso-8601)"
           DATE_TOMORROW="$(date --date="$DATE +1 day" --iso-8601)"
 
+          mkdir gh-pages-repo/runs/${DATE}
+
           echo "
             <html>
             <head>
