@@ -3,7 +3,7 @@ name: Sync liferay-portal fork
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *" 
+    - cron: "8,38 * * * *" 
 
 jobs:
   sync_liferay_portal:
