@@ -91,11 +91,11 @@ jobs:
 
           cd liferay-portal-repo/modules
 
-          yarn node-scripts report:bundle:sizes
-          yarn node-scripts report:bundle:sizes --with-internals
-          yarn node-scripts report:bundle:imports
-          yarn node-scripts report:source:imports
-          yarn node-scripts report:java:imports
+          yarn node-scripts report:bundle-sizes
+          yarn node-scripts report:bundle-sizes --with-internals
+          yarn node-scripts report:bundle-imports
+          yarn node-scripts report:source-imports
+          yarn node-scripts report:java-imports
 
       - name: Clear up space before cloning more repos
         run: |
